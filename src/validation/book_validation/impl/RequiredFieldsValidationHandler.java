@@ -1,6 +1,6 @@
 package validation.book_validation.impl;
 
-import validation.book_validation.BookSearchRequest;
+import factory.book_dto.BookRequest;
 import validation.book_validation.BookValidationHandler;
 import validation.book_validation.ValidationException;
 
@@ -14,21 +14,21 @@ public class RequiredFieldsValidationHandler implements BookValidationHandler {
     }
 
     @Override
-    public boolean handle(BookSearchRequest bookSearchRequest) throws ValidationException {
-        if (bookSearchRequest == null) {
+    public boolean handle(BookRequest request) {
+        if (request == null) {
             throw new ValidationException("Book request is required");
         }
-        if (bookSearchRequest.getTitle() == null || bookSearchRequest.getTitle().isBlank()) {
+        if (request.getTitle() == null || request.getTitle().isBlank()) {
             throw new ValidationException("Title of the Book is required");
         }
-        if (bookSearchRequest.getAuthor() == null || bookSearchRequest.getAuthor().isBlank()) {
+        if (request.getAuthor() == null || request.getAuthor().isBlank()) {
             throw new ValidationException("Author of the Book is required");
         }
-        if (bookSearchRequest.getIsbn() == null || bookSearchRequest.getIsbn().isBlank()) {
+        if (request.getIsbn() == null || request.getIsbn().isBlank()) {
             throw new ValidationException("ISBN of the Book is required");
         }
         if (nextHandler != null) {
-            return nextHandler.handle(bookSearchRequest);
+            return nextHandler.handle(request);
         }
         return true;
     }

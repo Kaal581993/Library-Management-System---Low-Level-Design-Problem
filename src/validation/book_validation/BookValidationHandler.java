@@ -1,5 +1,7 @@
 package validation.book_validation;
 
+import factory.book_dto.BookRequest;
+
 public interface BookValidationHandler {
     void setNextHandler(BookValidationHandler nextHandler);
 
@@ -8,5 +10,5 @@ public interface BookValidationHandler {
         return nextHandler;
     }
 
-    boolean handle(BookSearchRequest request);
+    boolean handle(BookRequest request);
 }

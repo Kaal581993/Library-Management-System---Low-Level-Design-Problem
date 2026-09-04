@@ -119,7 +119,8 @@ public class Book {
         }
 
         public BookBuilder setReference(boolean isReference) {
-            return null;
+            this.isReference = isReference;
+            return this;
         }
     }
 }

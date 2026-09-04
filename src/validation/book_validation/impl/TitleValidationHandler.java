@@ -1,5 +1,6 @@
 package validation.book_validation.impl;
 
+import factory.book_dto.BookRequest;
 import validation.book_validation.BookValidationHandler;
 import validation.book_validation.ValidationException;
 
@@ -12,12 +13,13 @@ public class TitleValidationHandler implements BookValidationHandler {
     }
 
     @Override
-    public boolean handle(validation.book_validation.BookSearchRequest bookSearchRequest) throws ValidationException {
-        if (bookSearchRequest.getTitle() == null || bookSearchRequest.getTitle().isEmpty()) {
+    public boolean handle(BookRequest request) {
+        if (request.getTitle() == null || request.getTitle().isEmpty()) {
             throw new ValidationException("Error: Title of the Book is required");
         }
-        System.out.println("Title validated: " + bookSearchRequest.getTitle());
-        System.out.println("Book available: " + bookSearchRequest.getIsbn() + "," + bookSearchRequest.getTitle() + " by " + bookSearchRequest.getAuthor());
-        return nextHandler != null && nextHandler.handle(bookSearchRequest);
+        if (nextHandler != null) {
+            return nextHandler.handle(request);
+        }
+        return true;
     }
 }

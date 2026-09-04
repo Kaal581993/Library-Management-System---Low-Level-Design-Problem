@@ -1,7 +1,6 @@
 package validation.book_validation.impl;
 
-import entity.BookStatus;
-import validation.book_validation.BookSearchRequest;
+import factory.book_dto.BookRequest;
 import validation.book_validation.BookValidationHandler;
 import validation.book_validation.ValidationException;
 
@@ -10,16 +9,13 @@ public class QuantityValidationHandler implements BookValidationHandler {
     public void setNextHandler(BookValidationHandler nextHandler) {
         this.nextHandler = nextHandler;
     }
-    public boolean handle(BookSearchRequest bookSearchRequest) throws ValidationException {
-        if (
-                bookSearchRequest.getQuantity() < 0
-                || bookSearchRequest.getBookStatus() == BookStatus.LOST
-                ||bookSearchRequest.getBookStatus() == BookStatus.DAMAGED
-                ||bookSearchRequest.getBookStatus() == BookStatus.UNAVAILABLE
-        ) {
-            throw new ValidationException("Error: Book quantity cannot be negative or the book is not available");
+    public boolean handle(BookRequest request) {
+        if (request.getQuantity() < 0) {
+            throw new ValidationException("Error: Book quantity cannot be negative");
         }
-        System.out.println("Book available: " + bookSearchRequest.getIsbn() +","+bookSearchRequest.getTitle()+ " by " + bookSearchRequest.getAuthor());
-        return nextHandler != null && nextHandler.handle(bookSearchRequest);
+        if (nextHandler != null) {
+            return nextHandler.handle(request);
+        }
+        return true;
     }
 }

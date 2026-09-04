@@ -1,7 +1,7 @@
-package strategey.impl;
+package strategy.impl;
 
 import entity.Book;
-import strategey.BookSearchStrategy;
+import strategy.BookSearchStrategy;
 
 import java.util.ArrayList;
 import java.util.List;

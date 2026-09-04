@@ -1,6 +1,6 @@
 package validation.book_validation.impl;
 
-import validation.book_validation.BookSearchRequest;
+import factory.book_dto.BookRequest;
 import validation.book_validation.BookValidationHandler;
 import validation.book_validation.ValidationException;
 
@@ -10,18 +10,17 @@ public class ISBNValidationHandler implements BookValidationHandler {
     public void setNextHandler(BookValidationHandler nextHandler) {
         this.nextHandler = nextHandler;
     }
-    public boolean handle(BookSearchRequest bookSearchRequest) throws ValidationException {
-        if (bookSearchRequest.getIsbn() == null || bookSearchRequest.getIsbn().isBlank() || bookSearchRequest.getIsbn().isEmpty()) {
-            System.out.println("Error: ISBN number of the Book  is required");
-            return false;
+    public boolean handle(BookRequest request) {
+        if (request.getIsbn() == null || request.getIsbn().isBlank() || request.getIsbn().isEmpty()) {
+            throw new ValidationException("Error: ISBN number of the Book is required");
         }
-        String isbn = bookSearchRequest.getIsbn().replaceAll("[- ]", "");
+        String isbn = request.getIsbn().replaceAll("[- ]", "");
         if (!isbn.matches("\\d{9}[\\dX]|\\d{13}")) {
-            System.out.println("Error: Invalid ISBN number format");
             throw new ValidationException("Error: Invalid ISBN number format");
         }
-        System.out.println("ISBN validated: " + isbn);
-        System.out.println("Book available: " + isbn +","+bookSearchRequest.getTitle()+ " by " + bookSearchRequest.getAuthor());
-        return nextHandler != null && nextHandler.handle(bookSearchRequest);
+        if (nextHandler != null) {
+            return nextHandler.handle(request);
+        }
+        return true;
     }
 }

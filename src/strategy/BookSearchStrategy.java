@@ -1,4 +1,4 @@
-package strategey;
+package strategy;
 
 
 import entity.Book;

@@ -1,14 +1,6 @@
 package validation.book_validation;
 
-import entity.Book;
 import entity.BookStatus;
-import strategey.SearchType;
-import strategey.impl.AuthorSearchStrategy;
-import strategey.impl.ISBNSearchStrategy;
-import strategey.impl.TitleSearchStrategy;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BookSearchRequest {
     private String isbn;

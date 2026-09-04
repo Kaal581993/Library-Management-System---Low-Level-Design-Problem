@@ -1,9 +1,11 @@
-package strategey;
+package strategy;
 
 public enum SearchType {
     ISBN,
     TITLE,
     AUTHOR,
-    PUBLICATION_YEAR
+    COMBINED
+
+
 
 }
