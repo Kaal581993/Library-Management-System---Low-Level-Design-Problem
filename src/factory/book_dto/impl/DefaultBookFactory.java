@@ -3,14 +3,13 @@ package factory.book_dto.impl;
 import entity.Book;
 import factory.BookFactory;
 import factory.book_dto.BookRequest;
-import validation.book_validation.impl.ISBNValidationHandler;
 
 public class DefaultBookFactory implements BookFactory {
+
+
+
     @Override
     public Book createBook(BookRequest bookRequest) {
-        ISBNValidationHandler isbnValidationHandler = new ISBNValidationHandler();
-
-
         return new Book.BookBuilder().
                 setAuthor(bookRequest.getAuthor()).
                 setTitle(bookRequest.getTitle()).
@@ -26,6 +25,7 @@ public class DefaultBookFactory implements BookFactory {
                 setTitle(bookRequest.getTitle()).
                 setIsbn(bookRequest.getIsbn()).
                 setYear(bookRequest.getYear()).
+                setIsReference(true).
                 setQuantity(bookRequest.getQuantity()).build();
     }
 
@@ -35,8 +35,8 @@ public class DefaultBookFactory implements BookFactory {
                 setAuthor(bookRequest.getAuthor()).
                 setTitle(bookRequest.getTitle()).
                 setIsbn(bookRequest.getIsbn()).
-                setYear(bookRequest.getYear()).build();
-
+                setYear(bookRequest.getYear()).
+                setQuantity(1).
+                build();
     }
-
 }

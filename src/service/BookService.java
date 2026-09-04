@@ -2,10 +2,21 @@ package service;
 
 import entity.Book;
 import entity.BookStatus;
+import factory.BookFactory;
+import factory.book_dto.BookRequest;
+import factory.book_dto.impl.DefaultBookFactory;
 import strategey.SearchType;
 import strategey.impl.AuthorSearchStrategy;
 import strategey.impl.ISBNSearchStrategy;
 import strategey.impl.TitleSearchStrategy;
+import validation.book_validation.BookSearchRequest;
+import validation.book_validation.BookValidationHandler;
+import validation.book_validation.ValidationException;
+import validation.book_validation.impl.ISBNValidationHandler;
+import validation.book_validation.impl.PublicationYearValidationHandler;
+import validation.book_validation.impl.QuantityValidationHandler;
+import validation.book_validation.impl.RequiredFieldsValidationHandler;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +33,14 @@ public class BookService {
     private int publicationYear;
     private boolean isReference;
 
-
     List<Book> bookList = new ArrayList<>();
     private SearchType searchType;
     AuthorSearchStrategy authorSearchStrategy;
     ISBNSearchStrategy isbnSearchStrategy;
     TitleSearchStrategy titleSearchStrategy;
-    private BookService() {
+    private final BookFactory bookFactory = new DefaultBookFactory();
 
+    private BookService() {
     }
 
     public SearchType getSearchType() {
@@ -40,19 +51,33 @@ public class BookService {
         this.searchType = searchType;
     }
 
+    public Book addBook(BookRequest bookRequest) {
+        BookSearchRequest request = toSearchRequest(bookRequest);
 
-    public Book addBook(Book.BookBuilder bookBuilder) {
-        Book book = bookBuilder.
-                setAuthor(author).
-                setTitle(title).
-                setIsbn(isbn).
-                setBookStatus(bookStatus).
-                setPublicationYear(publicationYear).
-                setReference(isReference).
-                setQuantity(quantity).
-                build();
+        BookValidationHandler chain = new ISBNValidationHandler()
+                .setNext(new RequiredFieldsValidationHandler()
+                .setNext(new QuantityValidationHandler()
+                .setNext(new PublicationYearValidationHandler())));
+
+        if (!chain.handle(request)) {
+            throw new ValidationException("Validation failed");
+        }
+
+        Book book = bookFactory.createBook(bookRequest);
         bookList.add(book);
         return book;
+    }
+
+    private BookSearchRequest toSearchRequest(BookRequest bookRequest) {
+        BookSearchRequest request = new BookSearchRequest();
+        request.setIsbn(bookRequest.getIsbn());
+        request.setTitle(bookRequest.getTitle());
+        request.setAuthor(bookRequest.getAuthor());
+        request.setQuantity(bookRequest.getQuantity());
+        request.setPublicationYear(bookRequest.getYear());
+        request.setBookStatus(bookStatus);
+        request.setReference(isReference);
+        return request;
     }
 
     public void removeBook(String isbn) {
@@ -89,8 +114,6 @@ public class BookService {
             synchronized (BookService.class) {
                 if (instance == null) { // Second check (with lock)
                     instance = new BookService();
-
-
 
 
                 }

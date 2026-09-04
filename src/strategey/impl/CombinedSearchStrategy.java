@@ -8,30 +8,18 @@ import java.util.List;
 
 public class CombinedSearchStrategy implements BookSearchStrategy {
 
-
-
-    public List<Book> searchBook(List<Book> books, String ISBN, String author, String title) {
-        List<Book> bookList = new ArrayList<>();
-        for(Book currentBook : books) {
-            if(
-                    currentBook.getIsbn().equalsIgnoreCase(ISBN)
-                    || currentBook.getAuthor().equalsIgnoreCase(author)
-                    || currentBook.getTitle().equalsIgnoreCase(title)
-            ) {
-                bookList.add(currentBook);
-            }
-        }
-        return bookList;
-    }
-
     @Override
     public List<Book> searchBook(List<Book> books, String query) {
         List<Book> bookList = new ArrayList<>();
-        for(Book currentBook : books) {
-            if(
-                            currentBook.getIsbn().matches(query)
-                            || currentBook.getAuthor().matches(query)
-                            || currentBook.getTitle().matches(query)
+        if (query == null || query.isBlank()) {
+            return bookList;
+        }
+        String lowerQuery = query.toLowerCase();
+        for (Book currentBook : books) {
+            if (
+                    currentBook.getIsbn().toLowerCase().contains(lowerQuery)
+                    || currentBook.getAuthor().toLowerCase().contains(lowerQuery)
+                    || currentBook.getTitle().toLowerCase().contains(lowerQuery)
             ) {
                 bookList.add(currentBook);
             }
