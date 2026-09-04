@@ -37,18 +37,17 @@ public class BookService {
 
     List<Book> bookList = new ArrayList<>();
     private SearchType searchType;
-    AuthorSearchStrategy authorSearchStrategy;
-    ISBNSearchStrategy isbnSearchStrategy;
-    TitleSearchStrategy titleSearchStrategy;
+//    AuthorSearchStrategy authorSearchStrategy;
+//    ISBNSearchStrategy isbnSearchStrategy;
+//    TitleSearchStrategy titleSearchStrategy;
     private final BookFactory bookFactory = new DefaultBookFactory();
 
     private final Map<SearchType, BookSearchStrategy> strategies = new EnumMap<>(SearchType.class);
     private BookService() {
-//        strategies.put(SearchType.AUTHOR, new AuthorSearchStrategy());
-//        strategies.put(SearchType.ISBN, new ISBNSearchStrategy());
-//        strategies.put(SearchType.TITLE, new TitleSearchStrategy());
-//        strategies.put(SearchType.COMBINED, new CombinedSearchStrategy());
-        // Add other SearchType values as needed
+        strategies.put(SearchType.AUTHOR, new AuthorSearchStrategy());
+        strategies.put(SearchType.ISBN, new ISBNSearchStrategy());
+        strategies.put(SearchType.TITLE, new TitleSearchStrategy());
+        strategies.put(SearchType.COMBINED, new CombinedSearchStrategy());
     }
 
     public SearchType getSearchType() {
