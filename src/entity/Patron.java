@@ -9,6 +9,7 @@ public class Patron {
     private String lastName;
     private String userName;
     private String email;
+    private PatronType patronType;
     private List<Loan> borrowingHistory;
 
     private Patron(PatronBuilder builder) {
@@ -19,6 +20,7 @@ public class Patron {
         this.userName = builder.userName;
         this.email = builder.email;
         this.borrowingHistory = builder.borrowingHistory;
+        this.patronType = builder.patronType;
     }
 
     public String getPatronId() {
@@ -37,7 +39,7 @@ public class Patron {
         return lastName;
     }
 
-    public String getUnserName() {
+    public String getUserName() {
         return userName;
     }
 
@@ -47,6 +49,10 @@ public class Patron {
 
     public List<Loan> getBorrowingHistory() {
         return borrowingHistory;
+    }
+
+    public PatronType getPatronType() {
+        return patronType;
     }
 
     public void setPatronId(String patronId) {
@@ -65,8 +71,8 @@ public class Patron {
         this.lastName = lastName;
     }
 
-    public void setUnserName(String unserName) {
-        this.userName = unserName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public void setEmail(String email) {
@@ -85,6 +91,7 @@ public class Patron {
         private String userName;
         private String email;
         private List<Loan> borrowingHistory;
+        private PatronType patronType;
 
         public PatronBuilder patronId(String patronId) {
             this.patronId = patronId;
@@ -118,6 +125,11 @@ public class Patron {
 
         public PatronBuilder borrowingHistory(List<Loan> borrowingHistory) {
             this.borrowingHistory = borrowingHistory;
+            return this;
+        }
+
+        public PatronBuilder patronType(PatronType patronType) {
+            this.patronType = patronType;
             return this;
         }
 
