@@ -1,19 +1,19 @@
 package factory.book_dto.impl;
 
 import entity.Book;
+import entity.util.IdGenerator;
 import factory.BookFactory;
 import factory.book_dto.BookRequest;
 
 public class DefaultBookFactory implements BookFactory {
 
-
-
     @Override
     public Book createBook(BookRequest bookRequest) {
         return new Book.BookBuilder().
-                setAuthor(bookRequest.getAuthor()).
+                setBookId(IdGenerator.generateBookId()).
+                setIsbn(bookRequest.getIsbn() != null ? bookRequest.getIsbn() : IdGenerator.generateISBN()).
                 setTitle(bookRequest.getTitle()).
-                setIsbn(bookRequest.getIsbn()).
+                setAuthor(bookRequest.getAuthor()).
                 setYear(bookRequest.getYear()).
                 setQuantity(bookRequest.getQuantity()).build();
     }
@@ -21,9 +21,10 @@ public class DefaultBookFactory implements BookFactory {
     @Override
     public Book createReferenceBook(BookRequest bookRequest) {
         return new Book.BookBuilder().
-                setAuthor(bookRequest.getAuthor()).
+                setBookId(IdGenerator.generateBookId()).
+                setIsbn(bookRequest.getIsbn() != null ? bookRequest.getIsbn() : IdGenerator.generateISBN()).
                 setTitle(bookRequest.getTitle()).
-                setIsbn(bookRequest.getIsbn()).
+                setAuthor(bookRequest.getAuthor()).
                 setYear(bookRequest.getYear()).
                 setIsReference(true).
                 setQuantity(bookRequest.getQuantity()).build();
@@ -32,9 +33,10 @@ public class DefaultBookFactory implements BookFactory {
     @Override
     public Book createEBook(BookRequest bookRequest) {
         return new Book.BookBuilder().
-                setAuthor(bookRequest.getAuthor()).
+                setBookId(IdGenerator.generateBookId()).
+                setIsbn(bookRequest.getIsbn() != null ? bookRequest.getIsbn() : IdGenerator.generateISBN()).
                 setTitle(bookRequest.getTitle()).
-                setIsbn(bookRequest.getIsbn()).
+                setAuthor(bookRequest.getAuthor()).
                 setYear(bookRequest.getYear()).
                 setQuantity(1).
                 build();

@@ -26,9 +26,6 @@ public class ReservationService implements BookObserver {
     private final PriorityQueue<Reservation> reservationQueue = new PriorityQueue<>(new FIFOPriorityStrategy());
     private final ReservationFactory reservationFactory = new DefaultReservationFactory();
     private final NotificationService notificationService = NotificationService.getInstance();
-    private final BookService bookService = BookService.getInstance();
-    private final LoanService loanService = LoanService.getInstance();
-    private final PatronService patronService = PatronService.getInstance();
     private ReservationValidationHandler validationChain;
 
     private ReservationService() {
@@ -45,11 +42,23 @@ public class ReservationService implements BookObserver {
         return instance;
     }
 
+    private BookService getBookService() {
+        return BookService.getInstance();
+    }
+
+    private LoanService getLoanService() {
+        return LoanService.getInstance();
+    }
+
+    private PatronService getPatronService() {
+        return PatronService.getInstance();
+    }
+
     private ReservationValidationHandler getValidationChain() {
         if (validationChain == null) {
-            validationChain = new BookAvailabilityValidationHandler(bookService)
-                    .setNext(new PatronEligibilityValidationHandler(patronService)
-                    .setNext(new BorrowingLimitValidationHandler(loanService)
+            validationChain = new BookAvailabilityValidationHandler(getBookService())
+                    .setNext(new PatronEligibilityValidationHandler(getPatronService())
+                    .setNext(new BorrowingLimitValidationHandler(getLoanService())
                     .setNext(new DuplicateReservationValidationHandler(this))));
         }
         return validationChain;
@@ -63,7 +72,7 @@ public class ReservationService implements BookObserver {
         getValidationChain().validate(request);
 
         Reservation reservation = reservationFactory.createReservation(request);
-        Book book = bookService.getBook(request.getBookId());
+        Book book = getBookService().getBook(request.getBookId());
         reservation.setBook(book);
         reservation.setPatron(request.getPatron());
 

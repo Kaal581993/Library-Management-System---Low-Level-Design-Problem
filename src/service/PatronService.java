@@ -34,7 +34,6 @@ public class PatronService {
     private static volatile PatronService instance;
     private final List<Patron> patrons = new ArrayList<>();
     private final Map<PatronSearchType, PatronSearchStrategy> strategies = new EnumMap<>(PatronSearchType.class);
-    private final LoanService loanService = LoanService.getInstance();
     private PatronValidationHandler validationChain;
 
     private PatronService() {
@@ -54,6 +53,10 @@ public class PatronService {
             }
         }
         return instance;
+    }
+
+    private LoanService getLoanService() {
+        return LoanService.getInstance();
     }
 
     private PatronFactory getFactory(PatronRequest request) {
@@ -240,7 +243,7 @@ public class PatronService {
         List<Loan> overdueLoans = getOverdueLoans(patronId);
         double totalFine = 0.0;
         for (Loan loan : overdueLoans) {
-            totalFine += loanService.calculateFine(loan.getLoanId());
+            totalFine += getLoanService().calculateFine(loan.getLoanId());
         }
         return totalFine;
     }

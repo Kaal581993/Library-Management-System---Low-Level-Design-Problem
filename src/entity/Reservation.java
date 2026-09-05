@@ -1,5 +1,7 @@
 package entity;
 
+import entity.util.IdGenerator;
+
 import java.util.Date;
 
 public class Reservation {
@@ -22,7 +24,7 @@ public class Reservation {
     }
 
 
-    public class ReservationBuilder{
+    public static class ReservationBuilder{
         private String reservationId;
         private Date reservationDate;
         private boolean isFulfilled;
@@ -69,10 +71,14 @@ public class Reservation {
             this.reservationStatus = reservationStatus;
             return this;
         }
-
+        public ReservationBuilder setReservationId() {
+            this.reservationId = IdGenerator.generateReservationId();
+            return this;
+        }
         public Reservation build(){
             return new Reservation(this);
         }
+
 
     }
 

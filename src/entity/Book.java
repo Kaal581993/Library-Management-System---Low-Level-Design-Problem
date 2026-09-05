@@ -20,6 +20,7 @@ public class Book extends BookSubject {
         this.publicationYear = builder.publicationYear;
         this.isReference = builder.isReference;
         this.bookStatus = builder.bookStatus;
+        this.bookId = builder.bookId;
     }
 
     public String getBookId() {
@@ -81,6 +82,7 @@ public class Book extends BookSubject {
     }
 
     public static class BookBuilder {
+        private String bookId;
         private String isbn;
         private String title;
         private String author;
@@ -88,6 +90,12 @@ public class Book extends BookSubject {
         private int publicationYear;
         private boolean isReference;
         private BookStatus bookStatus;
+
+        public BookBuilder setBookId(String bookId) {
+            this.bookId = bookId;
+            return this;
+        }
+
         public BookBuilder setIsbn(String isbn) {
             this.isbn = isbn;
             return this;

@@ -32,7 +32,6 @@ import java.util.Objects;
 public class LoanService {
 
     private static volatile LoanService instance;
-    private final PatronService patronService = PatronService.getInstance();
     private final BookService bookService = BookService.getInstance();
     private final ReservationService reservationService = ReservationService.getInstance();
     private final LoanFactory loanFactory = new DefaultLoanFactory();
@@ -62,14 +61,18 @@ public class LoanService {
         return instance;
     }
 
+    private PatronService getPatronService() {
+        return PatronService.getInstance();
+    }
+
     public Loan checkoutBook(LoanRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("Loan request is required");
         }
 
-        LoanValidationHandler chain = new PatronEligibilityHandler(patronService)
+        LoanValidationHandler chain = new PatronEligibilityHandler(getPatronService())
                 .setNext(new BookAvailabilityHandler(bookService)
-                .setNext(new LoanLimitHandler(this, patronService)
+                .setNext(new LoanLimitHandler(this, getPatronService())
                 .setNext(new DueDateValidationHandler())));
 
         chain.validate(request);
@@ -83,7 +86,7 @@ public class LoanService {
             bookService.updateBook(book);
         }
 
-        Patron patron = patronService.getPatronById(request.getPatronId());
+        Patron patron = getPatronService().getPatronById(request.getPatronId());
         if (patron != null && patron.getBorrowingHistory() != null) {
             patron.getBorrowingHistory().add(loan);
         }
@@ -166,7 +169,7 @@ public class LoanService {
             throw new IllegalArgumentException("Loan not found: " + loanId);
         }
 
-        Patron patron = patronService.getPatronById(loan.getPatronId());
+        Patron patron = getPatronService().getPatronById(loan.getPatronId());
         if (patron == null) {
             throw new IllegalArgumentException("Patron not found for loan: " + loanId);
         }

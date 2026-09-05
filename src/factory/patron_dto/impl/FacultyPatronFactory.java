@@ -2,6 +2,7 @@ package factory.patron_dto.impl;
 
 import entity.Patron;
 import entity.PatronStatus;
+import entity.util.IdGenerator;
 import factory.PatronFactory;
 import factory.patron_dto.PatronRequest;
 
@@ -9,21 +10,21 @@ public class FacultyPatronFactory implements PatronFactory {
 
     @Override
     public Patron createPatron(PatronRequest request) {
-        Patron patron = new Patron();
-        patron.setPatronId(request.getPatronId());
-        patron.setFirstName(request.getFirstName());
-        patron.setMiddleName(request.getMiddleName());
-        patron.setLastName(request.getLastName());
-        patron.setUserName(request.getUserName());
-        patron.setEmail(request.getEmail());
-        patron.setPatronType(request.getPatronType());
-        patron.setPatronStatus(PatronStatus.ACTIVE);
-        patron.setMaxBorrowingLimit(10);
-        patron.setLoanPeriodDays(30);
-        patron.setFineRatePerDay(0.25);
-        patron.setFineAmount(0.0);
-        patron.setFineStatus(entity.FineStatus.CLEAR);
-        return patron;
+        return new Patron.PatronBuilder()
+                .patronId(request.getPatronId() != null ? request.getPatronId() : IdGenerator.generatePatronId())
+                .firstName(request.getFirstName())
+                .middleName(request.getMiddleName())
+                .lastName(request.getLastName())
+                .userName(request.getUserName())
+                .email(request.getEmail())
+                .patronType(request.getPatronType())
+                .patronStatus(PatronStatus.ACTIVE)
+                .maxBorrowingLimit(10)
+                .loanPeriodDays(30)
+                .fineRatePerDay(0.25)
+                .fineAmount(0.0)
+                .fineStatus(entity.FineStatus.CLEAR)
+                .build();
     }
 
     @Override

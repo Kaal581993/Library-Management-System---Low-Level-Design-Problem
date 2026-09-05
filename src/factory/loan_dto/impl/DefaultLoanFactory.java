@@ -3,6 +3,7 @@ package factory.loan_dto.impl;
 import entity.Loan;
 import entity.LoanState;
 import entity.LoanType;
+import entity.util.IdGenerator;
 import factory.LoanFactory;
 import factory.loan_dto.LoanRequest;
 import state.impl.CheckedOutState;
@@ -24,7 +25,9 @@ public class DefaultLoanFactory implements LoanFactory {
         Date returnDate = request.getReturnDate();
         LoanState currentState = request.getCurrentState() != null ? request.getCurrentState() : new state.impl.CheckedOutState();
 
-        return new Loan(request.getPatronId(), request.getBookId(), checkoutDate, dueDate, returnDate, currentState);
+        Loan loan = new Loan(request.getPatronId(), request.getBookId(), checkoutDate, dueDate, returnDate, currentState);
+        loan.setLoanId(IdGenerator.generateLoanId());
+        return loan;
     }
 
     @Override
