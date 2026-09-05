@@ -1,83 +1,69 @@
-# Core Requirements
-## Book Management
+# Library Management System - Problem Statement
 
-1. Implement a Book class with attributes such as title, author, ISBN, and publication year.
+## Brief
 
-2. Create a system to add, remove, and update books in the library inventory.
+You are tasked with designing and implementing a Library Management System in Java. This system will help librarians manage books, patrons, and lending processes efficiently. Your solution should demonstrate your understanding of Object-Oriented Programming (OOP), SOLID principles, and relevant design patterns.
 
-3. Implement a search functionality to find books by title, author, or ISBN.
+**Note:** This assignment focuses on demonstrating your understanding of Java and OOP concepts. Don't worry about persistence, databases, or external APIs at this stage.
 
-## Patron Management
+## Core Requirements
 
-1. Design a Patron class to represent library members.
+### Book Management
+- Implement a Book class with attributes such as title, author, ISBN, and publication year.
+- Create a system to add, remove, and update books in the library inventory.
+- Implement a search functionality to find books by title, author, or ISBN.
 
-2. Implement functionality to add new patrons and update their information.
+### Patron Management
+- Design a Patron class to represent library members.
+- Implement functionality to add new patrons and update their information.
+- Create a system to track patron borrowing history.
 
-3. Create a system to track patron borrowing history.
+### Lending Process
+- Implement book checkout and return functionalities.
 
-## Lending Process
-
-1. Implement book checkout and return functionalities.
-
-2. Inventory Management
-
-3. Keep track of available and borrowed books.
+### Inventory Management
+- Keep track of available and borrowed books.
 
 ## Optional Extension
 
-1. Extend your Library Management System with the following advanced features:
+Extend your Library Management System with the following advanced features:
 
-2. Multi-branch Support
+### Multi-branch Support
+- Modify your system to support multiple library branches.
+- Design a system for transferring books between branches.
 
-3. Modify your system to support multiple library branches.
+### Reservation System
+- Allow patrons to reserve books that are currently checked out.
+- Implement a notification system for when reserved books become available.
 
-4. Design a system for transferring books between branches.
+### Recommendation System
+- Implement a book recommendation system based on patron borrowing history and preferences.
+- Use appropriate data structures and algorithms to efficiently generate recommendations.
 
-## Reservation System
+## Technical Requirements
 
-1. Allow patrons to reserve books that are currently checked out.
-
-2. Implement a notification system for when reserved books become available.
-
-3. Recommendation System
-
-4. Implement a book recommendation system based on patron borrowing history and preferences.
-
-5. Use appropriate data structures and algorithms to efficiently generate recommendations.
-
-# Technical Requirements
-1.  Use appropriate OOP concepts (inheritance, encapsulation, polymorphism, abstraction).
-
-2. Apply SOLID principles in your design.
-
-3. Implement at least two design patterns relevant to the problem (e.g., Observer, Factory, Strategy).
-
-4.  Use Java collections appropriately (e.g., List, Set, Map).
-
-5. Use a logging framework to log important events and errors.
+- Use appropriate OOP concepts (inheritance, encapsulation, polymorphism, abstraction).
+- Apply SOLID principles in your design.
+- Implement at least two design patterns relevant to the problem (e.g., Observer, Factory, Strategy).
+- Use Java collections appropriately (e.g., List, Set, Map).
+- Use a logging framework to log important events and errors.
 
 ## Evaluation Criteria
 
-1. Correct implementation of required functionalities
+- Correct implementation of required functionalities
+- Proper application of OOP concepts and SOLID principles
+- Appropriate use of design patterns
+- Code quality, readability, and organization
+- Clarity and completeness of design documentation
 
-2. Proper application of OOP concepts and SOLID principles
-
-3. Appropriate use of design patterns
-
-4. Code quality, readability, and organization
-
-5. Clarity and completeness of design documentation
-
-6. Submission guidelines
+## Submission Guidelines
 
 ### Deliverables
 1. Java source code implementing the Library Management System.
+2. A clear and concise README file.
+3. A class diagram showing the relationships between your classes (Add this in your Readme).
 
-2. Write a clear and concise README file.
+### Submission
+To submit your project, please provide a link to your GitHub repository and your submission should be a PR.
 
-3. A class diagram showing the relationships between your classes (Add this in your Readme)
-
-4. To submit your project, please provide a link to your GitHub repository and your submission should be a PR.
-
-[Important] Make sure the repository is public.
-
+**[Important]** Make sure the repository is public.
