@@ -22,9 +22,9 @@ public class DefaultLoanFactory implements LoanFactory {
         Date checkoutDate = request.getCheckoutDate() != null ? request.getCheckoutDate() : new Date();
         Date dueDate = calculateDueDate(checkoutDate, request.getLoanType());
         Date returnDate = request.getReturnDate();
-        LoanState currentState = request.getCurrentState() != null ? request.getCurrentState() : new CheckedOutState();
+        LoanState currentState = request.getCurrentState() != null ? request.getCurrentState() : new state.impl.CheckedOutState();
 
-        return new Loan(checkoutDate, dueDate, returnDate, currentState);
+        return new Loan(request.getPatronId(), request.getBookId(), checkoutDate, dueDate, returnDate, currentState);
     }
 
     @Override

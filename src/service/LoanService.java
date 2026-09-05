@@ -9,6 +9,12 @@ import factory.book_dto.BookRequest;
 import factory.loan_dto.LoanRequest;
 import factory.loan_dto.impl.DefaultLoanFactory;
 import state.impl.CheckedOutState;
+import validation.loan_validation.LoanValidationException;
+import validation.loan_validation.LoanValidationHandler;
+import validation.loan_validation.impl.BookAvailabilityHandler;
+import validation.loan_validation.impl.DueDateValidationHandler;
+import validation.loan_validation.impl.LoanLimitHandler;
+import validation.loan_validation.impl.PatronEligibilityHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +46,17 @@ public class LoanService {
             throw new IllegalArgumentException("Loan request is required");
         }
 
-        validatePatronExists(request.getPatronId());
-        Book book = validateBookAvailable(request.getBookId());
+        LoanValidationHandler chain = new PatronEligibilityHandler(patronService)
+                .setNext(new BookAvailabilityHandler(bookService)
+                .setNext(new LoanLimitHandler(this)
+                .setNext(new DueDateValidationHandler())));
+
+        chain.validate(request);
 
         Loan loan = loanFactory.createLoan(request);
-        loan.setCurrentState(new CheckedOutState());
+        loan.setCurrentState(new state.impl.CheckedOutState());
 
+        Book book = bookService.getBook(request.getBookId());
         if (book != null) {
             book.setQuantity(book.getQuantity() - 1);
             bookService.updateBook(book);
@@ -60,22 +71,14 @@ public class LoanService {
         return loan;
     }
 
-    private void validatePatronExists(String patronId) {
-        Patron patron = patronService.getPatronById(patronId);
-        if (patron == null) {
-            throw new IllegalArgumentException("Patron not found: " + patronId);
+    public List<Loan> getActiveLoans(String patronId) {
+        if (patronId == null) {
+            return new ArrayList<>();
         }
-    }
-
-    private Book validateBookAvailable(String bookId) {
-        Book book = bookService.getBook(bookId);
-        if (book == null) {
-            throw new IllegalArgumentException("Book not found: " + bookId);
-        }
-        if (book.getQuantity() <= 0) {
-            throw new IllegalArgumentException("Book is not available: " + bookId);
-        }
-        return book;
+        return loans.stream()
+                .filter(loan -> patronId.equals(loan.getPatronId())
+                        && loan.getReturnDate() == null)
+                .toList();
     }
 
     public Loan getLoanById(String loanId) {

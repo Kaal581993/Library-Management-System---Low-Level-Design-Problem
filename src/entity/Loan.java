@@ -4,12 +4,16 @@ import java.util.Date;
 
 public class Loan {
     private String loanId;
+    private String patronId;
+    private String bookId;
     private Date checkoutDate;
     private Date dueDate;
     private Date returnDate;
     private LoanState currentState;
 
-    public Loan(Date checkoutDate, Date dueDate, Date returnDate, LoanState currentState) {
+    public Loan(String patronId, String bookId, Date checkoutDate, Date dueDate, Date returnDate, LoanState currentState) {
+        this.patronId = patronId;
+        this.bookId = bookId;
         this.checkoutDate = checkoutDate;
         this.dueDate = dueDate;
         this.returnDate = returnDate;
@@ -18,6 +22,14 @@ public class Loan {
 
     public String getLoanId() {
         return loanId;
+    }
+
+    public String getPatronId() {
+        return patronId;
+    }
+
+    public String getBookId() {
+        return bookId;
     }
 
     public Date getCheckoutDate() {
@@ -30,6 +42,18 @@ public class Loan {
 
     public Date getReturnDate() {
         return returnDate;
+    }
+
+    public void setLoanId(String loanId) {
+        this.loanId = loanId;
+    }
+
+    public void setPatronId(String patronId) {
+        this.patronId = patronId;
+    }
+
+    public void setBookId(String bookId) {
+        this.bookId = bookId;
     }
 
     public void setCheckoutDate(Date checkoutDate) {
