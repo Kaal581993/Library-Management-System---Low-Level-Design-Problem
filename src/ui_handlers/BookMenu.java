@@ -1,11 +1,8 @@
 package ui_handlers;
 
 import entity.Book;
-import entity.Loan;
 import factory.book_dto.BookRequest;
-import factory.loan_dto.LoanRequest;
 import service.BookService;
-import service.LoanService;
 import strategy.SearchType;
 import validation.book_validation.ValidationException;
 
@@ -14,18 +11,16 @@ import java.util.Scanner;
 
 public class BookMenu {
     private final BookService bookService = BookService.getInstance();
-    private final LoanService loanService = LoanService.getInstance();
     private final Scanner scanner = new Scanner(System.in);
 
     public void displayMenu() {
         while (true) {
-            System.out.println("\n=== Library Management System ===");
+            System.out.println("\n=== Book Management ===");
             System.out.println("1. Add Book");
             System.out.println("2. Search Book");
             System.out.println("3. Remove Book");
             System.out.println("4. List All Books");
-            System.out.println("5. Checkout Book");
-            System.out.println("6. Exit");
+            System.out.println("5. Back to Main Menu");
             System.out.print("Enter choice: ");
 
             String choice = scanner.nextLine();
@@ -34,9 +29,7 @@ public class BookMenu {
                 case "2" -> searchBook();
                 case "3" -> removeBook();
                 case "4" -> listAllBooks();
-                case "5" -> checkoutBook();
-                case "6" -> {
-                    System.out.println("Exiting...");
+                case "5" -> {
                     return;
                 }
                 default -> System.out.println("Invalid choice. Please try again.");
@@ -124,48 +117,6 @@ public class BookMenu {
         }
         for (Book book : books) {
             System.out.println(book.getIsbn() + " | " + book.getTitle() + " | " + book.getAuthor() + " | Qty: " + book.getQuantity());
-        }
-    }
-
-    public void checkoutBook() {
-        System.out.print("Enter Patron ID: ");
-        String patronId = scanner.nextLine();
-
-        System.out.print("Enter Book ISBN: ");
-        String bookId = scanner.nextLine();
-
-        System.out.println("Select Loan Type:");
-        System.out.println("1. REGULAR");
-        System.out.println("2. REFERENCE");
-        System.out.println("3. INTER_LIBRARY");
-        System.out.println("4. DIGITAL");
-        System.out.print("Enter choice: ");
-
-        String loanTypeChoice = scanner.nextLine();
-        entity.LoanType loanType;
-        switch (loanTypeChoice) {
-            case "1" -> loanType = entity.LoanType.REGULAR;
-            case "2" -> loanType = entity.LoanType.REFERENCE;
-            case "3" -> loanType = entity.LoanType.INTER_LIBRARY;
-            case "4" -> loanType = entity.LoanType.DIGITAL;
-            default -> {
-                System.out.println("Invalid loan type.");
-                return;
-            }
-        }
-
-        LoanRequest request = new LoanRequest();
-        request.setPatronId(patronId);
-        request.setBookId(bookId);
-        request.setLoanType(loanType);
-        request.setCheckoutDate(new java.util.Date());
-
-        try {
-            Loan loan = loanService.checkoutBook(request);
-            System.out.println("Loan created successfully. Loan ID: " + loan.getLoanId());
-            System.out.println("Due Date: " + loan.getDueDate());
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
         }
     }
 }
