@@ -21,7 +21,7 @@ public class DefaultLoanFactory implements LoanFactory {
     @Override
     public Loan createLoan(LoanRequest request) {
         Date checkoutDate = request.getCheckoutDate() != null ? request.getCheckoutDate() : new Date();
-        Date dueDate = calculateDueDate(checkoutDate, request.getLoanType());
+        Date dueDate = request.getDueDate() != null ? request.getDueDate() : calculateDueDate(checkoutDate, request.getLoanType());
         Date returnDate = request.getReturnDate();
         LoanState currentState = request.getCurrentState() != null ? request.getCurrentState() : new state.impl.CheckedOutState();
 

@@ -3,6 +3,7 @@ package ui_handlers;
 import entity.Loan;
 import service.LoanService;
 import service.PatronService;
+import validation.loan_validation.LoanValidationException;
 
 import java.util.List;
 import java.util.Scanner;
@@ -77,7 +78,7 @@ public class LoanMenuHandler {
             Loan loan = loanService.checkoutBook(request);
             System.out.println("Loan created successfully. Loan ID: " + loan.getLoanId());
             System.out.println("Due Date: " + loan.getDueDate());
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | LoanValidationException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
