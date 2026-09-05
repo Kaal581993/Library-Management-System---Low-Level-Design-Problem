@@ -25,20 +25,7 @@ public class OverdueState implements LoanState {
 
     @Override
     public void renew(Loan loan) {
-        if (loan == null || loan.getDueDate() == null) {
-            return;
-        }
-        java.util.Date newDueDate = new java.util.Date(loan.getDueDate().toInstant().plus(14, ChronoUnit.DAYS).toMillis());
-        loan.setDueDate(newDueDate);
-    }
-
-    @Override
-    public double calculateFine(Loan loan) {
-        if (loan == null || loan.getDueDate() == null || loan.getReturnDate() == null) {
-            return 0.0;
-        }
-        long daysLate = ChronoUnit.DAYS.between(loan.getDueDate().toInstant(), loan.getReturnDate().toInstant());
-        return daysLate > 0 ? daysLate * 2.0 : 0.0;
+        throw new IllegalStateException("Cannot renew an overdue loan");
     }
 
     @Override

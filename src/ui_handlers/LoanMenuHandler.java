@@ -1,10 +1,8 @@
 package ui_handlers;
 
 import entity.Loan;
-import factory.loan_dto.LoanRequest;
 import service.LoanService;
 import service.PatronService;
-import state.LoanState;
 
 import java.util.List;
 import java.util.Scanner;
@@ -65,7 +63,7 @@ public class LoanMenuHandler {
             }
         }
 
-        LoanRequest request = new LoanRequest();
+        factory.loan_dto.LoanRequest request = new factory.loan_dto.LoanRequest();
         request.setPatronId(patronId);
         request.setBookId(bookId);
         request.setLoanType(loanType);
@@ -84,28 +82,11 @@ public class LoanMenuHandler {
         System.out.print("Enter Loan ID to return: ");
         String loanId = scanner.nextLine();
 
-        Loan loan = loanService.getLoanById(loanId);
-        if (loan == null) {
-            System.out.println("Loan not found.");
-            return;
-        }
-
-        if (loan.getReturnDate() != null) {
-            System.out.println("This book has already been returned.");
-            return;
-        }
-
-        loan.setReturnDate(new java.util.Date());
-        LoanState currentState = loan.getCurrentState();
-        if (currentState != null) {
-            currentState.returnBook(loan);
-        }
-
-        System.out.println("Book returned successfully. Return Date: " + loan.getReturnDate());
-
-        if (loan.getCurrentState() != null && loan.getCurrentState().getClass().getSimpleName().equals("OverdueState")) {
-            double fine = loan.getCurrentState().calculateFine(loan);
-            System.out.println("Fine due: " + fine);
+        try {
+            loanService.returnBook(loanId);
+            System.out.println("Book returned successfully.");
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
@@ -113,16 +94,12 @@ public class LoanMenuHandler {
         System.out.print("Enter Loan ID to renew: ");
         String loanId = scanner.nextLine();
 
-        Loan loan = loanService.getLoanById(loanId);
-        if (loan == null) {
-            System.out.println("Loan not found.");
-            return;
-        }
-
-        LoanState currentState = loan.getCurrentState();
-        if (currentState != null) {
-            currentState.renew(loan);
+        try {
+            loanService.renewLoan(loanId);
+            Loan loan = loanService.getLoanById(loanId);
             System.out.println("Loan renewed successfully. New Due Date: " + loan.getDueDate());
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 

@@ -33,15 +33,6 @@ public class CheckedOutState implements LoanState {
     }
 
     @Override
-    public double calculateFine(Loan loan) {
-        if (loan == null || loan.getDueDate() == null || loan.getReturnDate() == null) {
-            return 0.0;
-        }
-        long daysLate = ChronoUnit.DAYS.between(loan.getDueDate().toInstant(), loan.getReturnDate().toInstant());
-        return daysLate > 0 ? daysLate * 2.0 : 0.0;
-    }
-
-    @Override
     public boolean isOverDue(Loan loan) {
         if (loan == null || loan.getDueDate() == null) {
             return false;
