@@ -18,6 +18,7 @@ public class Reservation {
         this.patron = builder.patron;
         this.book = builder.book;
         this.priority = builder.priority;
+        this.reservationStatus = builder.reservationStatus;
     }
 
 
@@ -28,6 +29,7 @@ public class Reservation {
         private Patron patron;
         private Book book;
         private int priority;
+        private ReservationStatus reservationStatus;
 
         public ReservationBuilder(Date reservationDate, boolean isFulfilled, Patron patron, Book book, int priority){
             this.reservationDate = reservationDate;
@@ -35,6 +37,7 @@ public class Reservation {
             this.patron = patron;
             this.book = book;
             this.priority = priority;
+            this.reservationStatus = ReservationStatus.PENDING;
         }
 
         public ReservationBuilder setIsFulfilled(boolean isFulfilled){
@@ -59,6 +62,11 @@ public class Reservation {
 
         public ReservationBuilder setPriority(int priority){
             this.priority = priority;
+            return this;
+        }
+
+        public ReservationBuilder setReservationStatus(ReservationStatus reservationStatus){
+            this.reservationStatus = reservationStatus;
             return this;
         }
 

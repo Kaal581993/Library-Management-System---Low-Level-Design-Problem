@@ -1,6 +1,7 @@
 package service;
 
 import entity.Book;
+import entity.BookStatus;
 import entity.Loan;
 import entity.LoanState;
 import entity.Patron;
@@ -131,8 +132,10 @@ public class LoanService {
         Book book = bookService.getBook(loan.getBookId());
         if (book != null) {
             book.setQuantity(book.getQuantity() + 1);
+            if (book.getQuantity() > 0) {
+                book.setBookStatus(BookStatus.AVAILABLE);
+            }
             bookService.updateBook(book);
-            reservationService.processNextReservation(book.getIsbn());
         }
     }
 

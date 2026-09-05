@@ -1,6 +1,8 @@
 package entity;
 
-public class Book {
+import observer.BookSubject;
+
+public class Book extends BookSubject {
     private String bookId;
     private String isbn;
     private String title;
@@ -72,7 +74,10 @@ public class Book {
     }
 
     public void setBookStatus(BookStatus bookStatus) {
-
+        this.bookStatus = bookStatus;
+        if (bookStatus != null) {
+            notifyObservers(this);
+        }
     }
 
     public static class BookBuilder {

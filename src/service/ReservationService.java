@@ -8,8 +8,6 @@ import factory.ReservationFactory;
 import factory.reservation_dto.ReservationRequest;
 import factory.reservation_dto.impl.DefaultReservationFactory;
 import observer.BookObserver;
-import observer.BookSubject;
-import observer.PatronObserver;
 import strategy.reservation_impl.FIFOPriorityStrategy;
 import validation.reservation_validation.ReservationValidationHandler;
 import validation.reservation_validation.impl.BookAvailabilityValidationHandler;
@@ -21,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-public class ReservationService implements BookSubject {
+public class ReservationService implements BookObserver {
 
     private static volatile ReservationService instance;
     private final List<Reservation> reservations = new ArrayList<>();
@@ -57,7 +55,7 @@ public class ReservationService implements BookSubject {
         return validationChain;
     }
 
-    public Reservation createReservation(ReservationRequest request) {
+    public void createReservation(ReservationRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("Reservation request is required");
         }
@@ -65,8 +63,13 @@ public class ReservationService implements BookSubject {
         getValidationChain().validate(request);
 
         Reservation reservation = reservationFactory.createReservation(request);
-        reservation.setBook(bookService.getBook(request.getBookId()));
+        Book book = bookService.getBook(request.getBookId());
+        reservation.setBook(book);
         reservation.setPatron(request.getPatron());
+
+        if (book != null) {
+            book.addObserver(this);
+        }
 
         reservations.add(reservation);
         reservationQueue.add(reservation);
@@ -152,13 +155,17 @@ public class ReservationService implements BookSubject {
             return;
         }
 
-        for (Reservation reservation : reservations) {
-            if (reservation.getBook() != null
-                    && isbn.equals(reservation.getBook().getIsbn())
-                    && reservation.getReservationStatus() == ReservationStatus.PENDING) {
-                fulfillReservation(reservation.getReservationId());
-                break;
-            }
+        List<Reservation> matching = reservations.stream()
+                .filter(reservation -> reservation.getBook() != null
+                        && isbn.equals(reservation.getBook().getIsbn())
+                        && reservation.getReservationStatus() == ReservationStatus.PENDING)
+                .sorted(new FIFOPriorityStrategy())
+                .toList();
+
+        if (!matching.isEmpty()) {
+            Reservation next = matching.get(0);
+            reservationQueue.remove(next);
+            fulfillReservation(next.getReservationId());
         }
     }
 
@@ -167,30 +174,17 @@ public class ReservationService implements BookSubject {
             return;
         }
 
-        BookObserver observer = new PatronObserver(reservation.getPatron());
+        BookObserver observer = new observer.PatronObserver(reservation.getPatron());
         observer.update(reservation.getBook());
 
         notificationService.sendReservationNotification(reservation);
     }
 
     @Override
-    public void addObserver(BookObserver observer) {
-    }
-
-    @Override
-    public void removeObserver(BookObserver observer) {
-    }
-
-    @Override
-    public void notifyObservers(Book book) {
+    public void update(Book book) {
         if (book == null) {
             return;
         }
-
-        for (Reservation reservation : getReservationsByBook(book.getIsbn())) {
-            if (reservation.getReservationStatus() == ReservationStatus.PENDING) {
-                fulfillReservation(reservation.getReservationId());
-            }
-        }
+        processNextReservation(book.getIsbn());
     }
 }
