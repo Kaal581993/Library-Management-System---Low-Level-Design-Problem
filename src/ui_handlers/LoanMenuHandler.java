@@ -67,7 +67,11 @@ public class LoanMenuHandler {
         request.setPatronId(patronId);
         request.setBookId(bookId);
         request.setLoanType(loanType);
-        request.setCheckoutDate(new java.util.Date());
+        java.util.Date checkoutDate = new java.util.Date();
+        request.setCheckoutDate(checkoutDate);
+
+        // Calculate due date before validation
+        request.setDueDate(calculateDueDate(checkoutDate, loanType));
 
         try {
             Loan loan = loanService.checkoutBook(request);
@@ -120,5 +124,26 @@ public class LoanMenuHandler {
                     + " | Due Date: " + loan.getDueDate()
                     + " | Status: " + loan.getCurrentState().getClass().getSimpleName());
         }
+    }
+
+    private java.util.Date calculateDueDate(java.util.Date checkoutDate, entity.LoanType loanType) {
+        if (checkoutDate == null || loanType == null) {
+            return null;
+        }
+
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        calendar.setTime(checkoutDate);
+
+        int daysToAdd;
+        switch (loanType) {
+            case REGULAR -> daysToAdd = 14;
+            case REFERENCE -> daysToAdd = 7;
+            case INTER_LIBRARY -> daysToAdd = 30;
+            case DIGITAL -> daysToAdd = 3;
+            default -> daysToAdd = 14;
+        }
+
+        calendar.add(java.util.Calendar.DAY_OF_MONTH, daysToAdd);
+        return calendar.getTime();
     }
 }
