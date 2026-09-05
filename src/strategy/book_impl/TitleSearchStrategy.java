@@ -1,4 +1,4 @@
-package strategy.impl;
+package strategy.book_impl;
 
 import entity.Book;
 import strategy.BookSearchStrategy;
@@ -6,15 +6,15 @@ import strategy.BookSearchStrategy;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AuthorSearchStrategy implements BookSearchStrategy {
+public class TitleSearchStrategy implements BookSearchStrategy {
 
 
 
     @Override
-    public List<Book> searchBook(List<Book> books, String author) {
+    public List<Book> searchBook(List<Book> books, String title) {
         List<Book> bookList = new ArrayList<>();
         for(Book currentBook : books) {
-            if(currentBook.getAuthor().equalsIgnoreCase(author)) {
+            if(currentBook.getTitle().equalsIgnoreCase(title)) {
                 bookList.add(currentBook);
             }
         }

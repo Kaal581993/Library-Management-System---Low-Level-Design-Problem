@@ -1,16 +1,91 @@
 package service;
 
+import entity.Book;
+import entity.Loan;
+import entity.LoanState;
+import entity.Patron;
+import factory.LoanFactory;
+import factory.book_dto.BookRequest;
+import factory.loan_dto.LoanRequest;
+import factory.loan_dto.impl.DefaultLoanFactory;
+import state.impl.CheckedOutState;
 
-/**
- * Now let's talk about LoanService Immplementation,
- * What Design pattern is required?
- * Strategy, State, Observer, Decorator, Singleton, Factory Pattern, Chain of Responsiblity Pattern?
- * What problem it solves? How to implement it?
- * What methods should we implement,
- * What methods functionality has to be covered?
- * What pattern doen't needs to be implemented and why?
- * What happens if I don't implement it?
- * Give me step wise implementation guide, do not write the code, but give me the package structure with inheritance implementation
- * */
+import java.util.ArrayList;
+import java.util.List;
+
 public class LoanService {
+
+    private static volatile LoanService instance;
+    private final PatronService patronService = PatronService.getInstance();
+    private final BookService bookService = BookService.getInstance();
+    private final LoanFactory loanFactory = new DefaultLoanFactory();
+    private final List<Loan> loans = new ArrayList<>();
+
+    private LoanService() {
+    }
+
+    public static LoanService getInstance() {
+        if (instance == null) {
+            synchronized (LoanService.class) {
+                if (instance == null) {
+                    instance = new LoanService();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public Loan checkoutBook(LoanRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Loan request is required");
+        }
+
+        validatePatronExists(request.getPatronId());
+        Book book = validateBookAvailable(request.getBookId());
+
+        Loan loan = loanFactory.createLoan(request);
+        loan.setCurrentState(new CheckedOutState());
+
+        if (book != null) {
+            book.setQuantity(book.getQuantity() - 1);
+            bookService.updateBook(book);
+        }
+
+        Patron patron = patronService.getPatronById(request.getPatronId());
+        if (patron != null && patron.getBorrowingHistory() != null) {
+            patron.getBorrowingHistory().add(loan);
+        }
+
+        loans.add(loan);
+        return loan;
+    }
+
+    private void validatePatronExists(String patronId) {
+        Patron patron = patronService.getPatronById(patronId);
+        if (patron == null) {
+            throw new IllegalArgumentException("Patron not found: " + patronId);
+        }
+    }
+
+    private Book validateBookAvailable(String bookId) {
+        Book book = bookService.getBook(bookId);
+        if (book == null) {
+            throw new IllegalArgumentException("Book not found: " + bookId);
+        }
+        if (book.getQuantity() <= 0) {
+            throw new IllegalArgumentException("Book is not available: " + bookId);
+        }
+        return book;
+    }
+
+    public Loan getLoanById(String loanId) {
+        return loans.stream()
+                .filter(loan -> loanId.equals(loan.getLoanId()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public List<Loan> getAllLoans() {
+        return new ArrayList<>(loans);
+    }
 }

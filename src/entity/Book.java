@@ -17,6 +17,7 @@ public class Book {
         this.author = builder.author;
         this.publicationYear = builder.publicationYear;
         this.isReference = builder.isReference;
+        this.bookStatus = builder.bookStatus;
     }
 
     public String getBookId() {
@@ -64,6 +65,14 @@ public class Book {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public BookStatus getBookStatus() {
+        return bookStatus;
+    }
+
+    public void setBookStatus(BookStatus bookStatus) {
+
     }
 
     public static class BookBuilder {

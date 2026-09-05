@@ -1,16 +1,15 @@
 package service;
 
 import entity.Book;
-import entity.BookStatus;
 import factory.BookFactory;
 import factory.book_dto.BookRequest;
 import factory.book_dto.impl.DefaultBookFactory;
 import strategy.BookSearchStrategy;
 import strategy.SearchType;
-import strategy.impl.AuthorSearchStrategy;
-import strategy.impl.CombinedSearchStrategy;
-import strategy.impl.ISBNSearchStrategy;
-import strategy.impl.TitleSearchStrategy;
+import strategy.book_impl.AuthorSearchStrategy;
+import strategy.book_impl.CombinedSearchStrategy;
+import strategy.book_impl.ISBNSearchStrategy;
+import strategy.book_impl.TitleSearchStrategy;
 import validation.book_validation.BookValidationHandler;
 import validation.book_validation.ValidationException;
 import validation.book_validation.impl.ISBNValidationHandler;
@@ -115,6 +114,19 @@ public class BookService {
             throw new IllegalArgumentException("No strategy registered for search type: " + type);
         }
         return strategy.searchBook(bookList, query);
+    }
+
+    public void updateBook(Book book) {
+        if (book == null) {
+            return;
+        }
+        for (int i = 0; i < bookList.size(); i++) {
+            Book existing = bookList.get(i);
+            if (existing.getIsbn().equals(book.getIsbn())) {
+                bookList.set(i, book);
+                return;
+            }
+        }
     }
 
 

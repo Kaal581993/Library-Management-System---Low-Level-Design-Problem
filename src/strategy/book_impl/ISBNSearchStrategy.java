@@ -1,4 +1,4 @@
-package strategy.impl;
+package strategy.book_impl;
 
 import entity.Book;
 import strategy.BookSearchStrategy;
