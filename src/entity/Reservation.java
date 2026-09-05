@@ -9,6 +9,7 @@ public class Reservation {
     private Patron patron;
     private Book book;
     private int priority;
+    private ReservationStatus reservationStatus;
 
     private Reservation(ReservationBuilder builder) {
         this.reservationId = builder.reservationId;
@@ -83,8 +84,28 @@ public class Reservation {
         this.reservationDate = reservationDate;
     }
 
+    public void setReservationId(String reservationId) {
+        this.reservationId = reservationId;
+    }
+
     public void setFulfilled(boolean fulfilled) {
         isFulfilled = fulfilled;
+    }
+
+    public void setPatron(Patron patron) {
+        this.patron = patron;
+    }
+
+    public void setBook(entity.Book book) {
+        this.book = book;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public void setReservationStatus(ReservationStatus reservationStatus) {
+        this.reservationStatus = reservationStatus;
     }
 
     public boolean isFulfilled() {
@@ -101,5 +122,9 @@ public class Reservation {
 
     public int getPriority() {
         return priority;
+    }
+
+    public ReservationStatus getReservationStatus() {
+        return reservationStatus;
     }
 }

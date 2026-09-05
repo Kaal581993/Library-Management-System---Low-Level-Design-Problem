@@ -3,16 +3,13 @@ package state.impl;
 import entity.Loan;
 import entity.LoanState;
 
-import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 public class RenewedState implements LoanState {
 
     @Override
     public void checkout(Loan loan) {
-        if (loan != null) {
-            loan.setCurrentState(new CheckedOutState());
-        }
+        throw new IllegalStateException("Cannot checkout a renewed loan. Create a new loan instead.");
     }
 
     @Override
@@ -28,7 +25,7 @@ public class RenewedState implements LoanState {
         if (loan == null || loan.getDueDate() == null) {
             return;
         }
-        java.util.Date newDueDate = new java.util.Date(loan.getDueDate().toInstant().plus(14, ChronoUnit.DAYS).toMillis());
+        java.util.Date newDueDate = new java.util.Date(loan.getDueDate().toInstant().plus(14, ChronoUnit.DAYS).toEpochMilli());
         loan.setDueDate(newDueDate);
     }
 

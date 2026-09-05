@@ -3,16 +3,11 @@ package state.impl;
 import entity.Loan;
 import entity.LoanState;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-
 public class OverdueState implements LoanState {
 
     @Override
     public void checkout(Loan loan) {
-        if (loan != null) {
-            loan.setCurrentState(new CheckedOutState());
-        }
+        throw new IllegalStateException("Cannot checkout an overdue loan. Return or renew it first.");
     }
 
     @Override

@@ -8,6 +8,7 @@ import entity.PatronType;
 import factory.LoanFactory;
 import factory.loan_dto.LoanRequest;
 import factory.loan_dto.impl.DefaultLoanFactory;
+import service.ReservationService;
 import state.impl.CheckedOutState;
 import strategy.FineCalculationStrategy;
 import strategy.loan_impl.HolidayFineStrategy;
@@ -32,6 +33,7 @@ public class LoanService {
     private static volatile LoanService instance;
     private final PatronService patronService = PatronService.getInstance();
     private final BookService bookService = BookService.getInstance();
+    private final ReservationService reservationService = ReservationService.getInstance();
     private final LoanFactory loanFactory = new DefaultLoanFactory();
     private final List<Loan> loans = new ArrayList<>();
     private final Map<PatronType, FineCalculationStrategy> fineStrategies = new EnumMap<>(PatronType.class);
@@ -130,6 +132,7 @@ public class LoanService {
         if (book != null) {
             book.setQuantity(book.getQuantity() + 1);
             bookService.updateBook(book);
+            reservationService.processNextReservation(book.getIsbn());
         }
     }
 

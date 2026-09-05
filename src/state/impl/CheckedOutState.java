@@ -28,7 +28,7 @@ public class CheckedOutState implements LoanState {
         if (loan == null || loan.getDueDate() == null) {
             return;
         }
-        java.util.Date newDueDate = new java.util.Date(loan.getDueDate().toInstant().plus(14, ChronoUnit.DAYS).toMillis());
+        java.util.Date newDueDate = new java.util.Date(loan.getDueDate().toInstant().plus(14, ChronoUnit.DAYS).toEpochMilli());
         loan.setDueDate(newDueDate);
     }
 

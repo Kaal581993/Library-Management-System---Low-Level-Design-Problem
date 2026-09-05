@@ -68,7 +68,7 @@ public class Loan {
         this.returnDate = returnDate;
     }
 
-    public state.LoanState getCurrentState() {
+    public LoanState getCurrentState() {
         return currentState;
     }
 
