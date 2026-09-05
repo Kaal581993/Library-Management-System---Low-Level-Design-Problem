@@ -55,7 +55,7 @@ public class ReservationService implements BookObserver {
         return validationChain;
     }
 
-    public void createReservation(ReservationRequest request) {
+    public Reservation createReservation(ReservationRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("Reservation request is required");
         }
