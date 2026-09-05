@@ -10,5 +10,5 @@ public enum PatronType {
     STAFF,
     ADMIN,
     GUEST,
-    HOD
+    EXTERNAL, HOD
 }
