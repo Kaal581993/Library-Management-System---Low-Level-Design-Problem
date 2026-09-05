@@ -1,5 +1,7 @@
 package validation.loan_validation.impl;
 
+import entity.Patron;
+import entity.PatronStatus;
 import factory.loan_dto.LoanRequest;
 import service.PatronService;
 import validation.loan_validation.LoanValidationException;
@@ -25,8 +27,13 @@ public class PatronEligibilityHandler implements LoanValidationHandler {
             throw new LoanValidationException("Patron ID is required");
         }
 
-        if (patronService.getPatronById(request.getPatronId()) == null) {
+        Patron patron = patronService.getPatronById(request.getPatronId());
+        if (patron == null) {
             throw new LoanValidationException("Patron not found: " + request.getPatronId());
+        }
+
+        if (patron.getPatronStatus() != PatronStatus.ACTIVE) {
+            throw new LoanValidationException("Patron is not eligible: " + patron.getPatronStatus());
         }
 
         if (nextHandler != null) {

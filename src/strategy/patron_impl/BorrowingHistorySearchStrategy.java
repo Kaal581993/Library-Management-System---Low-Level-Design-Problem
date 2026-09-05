@@ -1,6 +1,7 @@
 package strategy.patron_impl;
 
 import entity.Patron;
+import strategy.PatronSearchStrategy;
 
 import java.util.List;
 import java.util.stream.Collectors;

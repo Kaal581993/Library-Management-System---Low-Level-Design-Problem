@@ -7,6 +7,7 @@ public enum PatronType {
     PROFESSOR,
     FACULTY,
     HEADMASTER,
+    STAFF,
     ADMIN,
     GUEST,
     HOD

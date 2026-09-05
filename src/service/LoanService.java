@@ -69,7 +69,7 @@ public class LoanService {
 
         LoanValidationHandler chain = new PatronEligibilityHandler(patronService)
                 .setNext(new BookAvailabilityHandler(bookService)
-                .setNext(new LoanLimitHandler(this)
+                .setNext(new LoanLimitHandler(this, patronService)
                 .setNext(new DueDateValidationHandler())));
 
         chain.validate(request);
@@ -177,6 +177,17 @@ public class LoanService {
         }
 
         return strategy.calculateFine(loan);
+    }
+
+    public void updateOverdueLoans() {
+        for (Loan loan : loans) {
+            if (loan.getReturnDate() == null
+                    && loan.getCurrentState() != null
+                    && loan.getCurrentState().isOverDue(loan)
+                    && !(loan.getCurrentState() instanceof state.impl.OverdueState)) {
+                loan.setCurrentState(new state.impl.OverdueState());
+            }
+        }
     }
 
     public List<Loan> getOverdueLoans() {

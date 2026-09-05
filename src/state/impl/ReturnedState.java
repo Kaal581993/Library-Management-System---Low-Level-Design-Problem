@@ -12,10 +12,7 @@ public class ReturnedState implements LoanState {
 
     @Override
     public void returnBook(Loan loan) {
-        if (loan != null) {
-            loan.setCurrentState(this);
-            loan.setReturnDate(new java.util.Date());
-        }
+        throw new IllegalStateException("Book has already been returned");
     }
 
     @Override
