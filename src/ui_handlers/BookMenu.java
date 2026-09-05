@@ -1,6 +1,7 @@
 package ui_handlers;
 
 import entity.Book;
+import entity.Loan;
 import factory.book_dto.BookRequest;
 import factory.loan_dto.LoanRequest;
 import service.BookService;
