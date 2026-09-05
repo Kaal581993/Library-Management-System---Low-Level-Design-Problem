@@ -10,6 +10,13 @@ public class Patron {
     private String userName;
     private String email;
     private PatronType patronType;
+    private PatronStatus patronStatus;
+    private double fineAmount;
+    private FineStatus fineStatus;
+    private String suspensionReason;
+    private int maxBorrowingLimit;
+    private int loanPeriodDays;
+    private double fineRatePerDay;
     private List<Loan> borrowingHistory;
 
     private Patron(PatronBuilder builder) {
@@ -19,8 +26,15 @@ public class Patron {
         this.lastName = builder.lastName;
         this.userName = builder.userName;
         this.email = builder.email;
-        this.borrowingHistory = builder.borrowingHistory;
         this.patronType = builder.patronType;
+        this.patronStatus = builder.patronStatus;
+        this.fineAmount = builder.fineAmount;
+        this.fineStatus = builder.fineStatus;
+        this.suspensionReason = builder.suspensionReason;
+        this.maxBorrowingLimit = builder.maxBorrowingLimit;
+        this.loanPeriodDays = builder.loanPeriodDays;
+        this.fineRatePerDay = builder.fineRatePerDay;
+        this.borrowingHistory = builder.borrowingHistory;
     }
 
     public String getPatronId() {
@@ -55,6 +69,34 @@ public class Patron {
         return patronType;
     }
 
+    public PatronStatus getPatronStatus() {
+        return patronStatus;
+    }
+
+    public double getFineAmount() {
+        return fineAmount;
+    }
+
+    public FineStatus getFineStatus() {
+        return fineStatus;
+    }
+
+    public String getSuspensionReason() {
+        return suspensionReason;
+    }
+
+    public int getMaxBorrowingLimit() {
+        return maxBorrowingLimit;
+    }
+
+    public int getLoanPeriodDays() {
+        return loanPeriodDays;
+    }
+
+    public double getFineRatePerDay() {
+        return fineRatePerDay;
+    }
+
     public void setPatronId(String patronId) {
         this.patronId = patronId;
     }
@@ -83,6 +125,38 @@ public class Patron {
         this.borrowingHistory = borrowingHistory;
     }
 
+    public void setPatronType(PatronType patronType) {
+        this.patronType = patronType;
+    }
+
+    public void setPatronStatus(PatronStatus patronStatus) {
+        this.patronStatus = patronStatus;
+    }
+
+    public void setFineAmount(double fineAmount) {
+        this.fineAmount = fineAmount;
+    }
+
+    public void setFineStatus(FineStatus fineStatus) {
+        this.fineStatus = fineStatus;
+    }
+
+    public void setSuspensionReason(String suspensionReason) {
+        this.suspensionReason = suspensionReason;
+    }
+
+    public void setMaxBorrowingLimit(int maxBorrowingLimit) {
+        this.maxBorrowingLimit = maxBorrowingLimit;
+    }
+
+    public void setLoanPeriodDays(int loanPeriodDays) {
+        this.loanPeriodDays = loanPeriodDays;
+    }
+
+    public void setFineRatePerDay(double fineRatePerDay) {
+        this.fineRatePerDay = fineRatePerDay;
+    }
+
     public static class PatronBuilder {
         private String patronId;
         private String firstName;
@@ -92,6 +166,13 @@ public class Patron {
         private String email;
         private List<Loan> borrowingHistory;
         private PatronType patronType;
+        private PatronStatus patronStatus;
+        private double fineAmount;
+        private FineStatus fineStatus;
+        private String suspensionReason;
+        private int maxBorrowingLimit;
+        private int loanPeriodDays;
+        private double fineRatePerDay;
 
         public PatronBuilder patronId(String patronId) {
             this.patronId = patronId;
@@ -130,6 +211,41 @@ public class Patron {
 
         public PatronBuilder patronType(PatronType patronType) {
             this.patronType = patronType;
+            return this;
+        }
+
+        public PatronBuilder patronStatus(PatronStatus patronStatus) {
+            this.patronStatus = patronStatus;
+            return this;
+        }
+
+        public PatronBuilder fineAmount(double fineAmount) {
+            this.fineAmount = fineAmount;
+            return this;
+        }
+
+        public PatronBuilder fineStatus(FineStatus fineStatus) {
+            this.fineStatus = fineStatus;
+            return this;
+        }
+
+        public PatronBuilder suspensionReason(String suspensionReason) {
+            this.suspensionReason = suspensionReason;
+            return this;
+        }
+
+        public PatronBuilder maxBorrowingLimit(int maxBorrowingLimit) {
+            this.maxBorrowingLimit = maxBorrowingLimit;
+            return this;
+        }
+
+        public PatronBuilder loanPeriodDays(int loanPeriodDays) {
+            this.loanPeriodDays = loanPeriodDays;
+            return this;
+        }
+
+        public PatronBuilder fineRatePerDay(double fineRatePerDay) {
+            this.fineRatePerDay = fineRatePerDay;
             return this;
         }
 
